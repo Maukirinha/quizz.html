@@ -70,8 +70,20 @@
 
 <div id="sheet" class="sheet" hidden>
   <div class="sheet-head">
+    <img class="sheet-mark" src="icons/reactor.svg" alt="" width="512" height="512">
     <b>MENU GERAL DE COMANDOS</b>
     <button id="sheetClose">✕</button>
+  </div>
+
+  <div class="launcher">
+    <button id="btnBoot" class="launch-icon" aria-label="Inicializar núcleo">
+      <img src="icons/reactor.svg" alt="" width="512" height="512">
+    </button>
+    <div class="launch-txt">
+      <b id="launchTitle">NÚCLEO EM ESPERA</b>
+      <s id="launchSub">toque no reator para inicializar</s>
+      <em id="launchInfo">—</em>
+    </div>
   </div>
   <div class="sheet-tabs" id="sheetTabs"></div>
   <div class="sheet-body" id="sheetBody"></div>

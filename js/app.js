@@ -13,7 +13,9 @@
     btnPower:$('btnPower'), btnAuto:$('btnAuto'), btnPush:$('btnPush'),
     btnMute:$('btnMute'), btnMenu:$('btnMenu'),
     sheet:$('sheet'), sheetTabs:$('sheetTabs'), sheetBody:$('sheetBody'),
-    sheetClose:$('sheetClose'), flash:$('flash')
+    sheetClose:$('sheetClose'), flash:$('flash'),
+    btnBoot:$('btnBoot'), launchTitle:$('launchTitle'),
+    launchSub:$('launchSub'), launchInfo:$('launchInfo')
   };
 
   let ativo = false;          // janela de comando aberta (pós wake word)
@@ -66,6 +68,7 @@
     el.stateLabel.textContent = estado;
     if (estado === 'bloqueado' || estado === 'erro' || estado === 'parado')
       el.btnPower.classList.remove('on');
+    pintaLauncher(estado);
     Hud.set(estado === 'reconectando' ? 'ouvindo' : estado);
   }
 
@@ -235,6 +238,7 @@
      ========================================================= */
   function abrirSheet(grupo){
     el.sheet.hidden = false;
+    pintaLauncher(el.stateLabel.textContent);
     const gs = Skills.grupos();
     const atual = grupo || gs[0];
     el.sheetTabs.innerHTML = '';
@@ -291,10 +295,24 @@
   }
   sequenciaBoot();
 
-  el.bootBtn.onclick = async () => {
-    el.boot.classList.add('hide');
-    setTimeout(() => el.boot.style.display = 'none', 800);
+  /* ---- ícone de inicialização do menu ---- */
+  function pintaLauncher(estado){
+    const ativo = Voz.ligado && estado !== 'bloqueado' && estado !== 'erro';
+    el.btnBoot.classList.toggle('on', ativo);
+    el.launchTitle.textContent =
+      estado === 'bloqueado' ? 'MICROFONE BLOQUEADO'
+      : estado === 'erro'    ? 'FALHA NO NÚCLEO'
+      : ativo                ? 'NÚCLEO ATIVO'
+                             : 'NÚCLEO EM ESPERA';
+    el.launchSub.textContent = ativo
+      ? 'toque no reator para reinicializar'
+      : 'toque no reator para inicializar';
+    el.launchInfo.textContent =
+      `${Skills.lista.length} habilidades · ${Skills.grupos().length} módulos · ` +
+      `${Store.cfg.autonomo ? 'autônomo' : 'por comando'}`;
+  }
 
+  async function inicializar(primeira){
     // desbloqueia áudio e microfone no gesto do usuário
     try { await navigator.mediaDevices.getUserMedia({ audio:true })
             .then(s => s.getTracks().forEach(t => t.stop())); } catch {}
@@ -310,10 +328,33 @@
     Auto.iniciar(saidaAutonoma);
     ligarEscuta();
 
-    linha('SISTEMA', 'Núcleo iniciado. ' + Skills.lista.length +
-          ' habilidades carregadas em ' + Skills.grupos().length + ' módulos.', 'sys');
-    await responder(`${U.saudacao()}, ${Store.cfg.nome}. Sistema J.A.R.V.I.S. online e monitorando. ` +
-                    `Diga Jarvis para me acionar, ou toque no menu para ver todos os comandos.`);
+    linha('SISTEMA', (primeira ? 'Núcleo iniciado. ' : 'Núcleo reinicializado. ') +
+          Skills.lista.length + ' habilidades carregadas em ' +
+          Skills.grupos().length + ' módulos.', 'sys');
+
+    await responder(primeira
+      ? `${U.saudacao()}, ${Store.cfg.nome}. Sistema J.A.R.V.I.S. online e monitorando. ` +
+        `Diga Jarvis para me acionar, ou toque no menu para ver todos os comandos.`
+      : `Núcleo reinicializado, ${Store.cfg.nome}. Todos os módulos recarregados e escuta restabelecida.`);
+  }
+
+  el.bootBtn.onclick = () => {
+    el.boot.classList.add('hide');
+    setTimeout(() => el.boot.style.display = 'none', 800);
+    inicializar(true);
+  };
+
+  // reinicialização pelo ícone do menu
+  el.btnBoot.onclick = async () => {
+    Dev.vibrar([40, 60, 40]);
+    Voz.calar();
+    Voz.desligar();
+    fecharJanela();
+    pinta('parado');
+    el.launchTitle.textContent = 'REINICIALIZANDO…';
+    el.launchSub.textContent = 'recarregando módulos';
+    await new Promise(r => setTimeout(r, 700));
+    await inicializar(false);
   };
 
   // reativa a escuta ao voltar para o app

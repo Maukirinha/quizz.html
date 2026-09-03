@@ -76,8 +76,29 @@ body{
 .sheet{position:fixed;inset:0;z-index:40;background:#03070d;
   display:flex;flex-direction:column}
 .sheet[hidden],.flash[hidden]{display:none!important}
-.sheet-head{display:flex;justify-content:space-between;align-items:center;
+.sheet-head{display:flex;align-items:center;gap:12px;
   padding:16px;border-bottom:1px solid var(--line);letter-spacing:3px;font-size:14px}
+.sheet-head b{flex:1}
+.sheet-mark{width:26px;height:26px;filter:drop-shadow(0 0 8px rgba(57,215,255,.7))}
+
+/* ---- ícone de inicialização dentro do menu ---- */
+.launcher{display:flex;align-items:center;gap:18px;padding:18px 16px;
+  border-bottom:1px solid var(--line);
+  background:radial-gradient(60% 140% at 12% 50%,rgba(57,215,255,.10),transparent 70%)}
+.launch-icon{width:84px;height:84px;flex:none;padding:0;border:0;border-radius:50%;
+  background:none;position:relative;transition:filter .3s,transform .15s}
+.launch-icon img{width:100%;height:100%;display:block}
+.launch-icon{filter:drop-shadow(0 0 14px rgba(57,215,255,.35)) saturate(.45) brightness(.72)}
+.launch-icon.on{filter:drop-shadow(0 0 26px rgba(57,215,255,.85)) saturate(1) brightness(1)}
+.launch-icon:active{transform:scale(.93)}
+.launch-icon::after{content:"";position:absolute;inset:-7px;border-radius:50%;
+  border:1px solid var(--line)}
+.launch-icon.on::after{border-color:var(--cy);animation:aro 2.6s ease-in-out infinite}
+@keyframes aro{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+.launch-txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.launch-txt b{font-size:13px;letter-spacing:3px;color:var(--cy)}
+.launch-txt s{text-decoration:none;font-size:12px;color:var(--dim)}
+.launch-txt em{font-style:normal;font-size:11px;letter-spacing:1px;color:var(--cy2)}
 .sheet-head button{background:none;border:0;color:var(--cy);font-size:22px}
 .sheet-tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;border-bottom:1px solid var(--line)}
 .sheet-tabs button{white-space:nowrap;background:none;border:1px solid var(--line);

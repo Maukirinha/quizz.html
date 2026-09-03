@@ -242,3 +242,22 @@ O Android recorta ícones em círculo, losango ou quadrado arredondado,
 conforme o fabricante. Por isso o arquivo *maskable* mantém todo o desenho
 dentro de 62% do quadro — a zona segura — evitando que os anéis externos
 sejam cortados na tela inicial.
+
+### 7.5 Ícone de inicialização dentro do menu
+1. **Onde fica** — no topo do menu geral de comandos, logo abaixo do título,
+   junto de uma marca menor do mesmo reator no cabeçalho.
+2. **O que mostra** — três informações de estado, atualizadas em tempo real:
+   1. `NÚCLEO ATIVO`, `NÚCLEO EM ESPERA`, `MICROFONE BLOQUEADO` ou `FALHA NO NÚCLEO`.
+   2. A instrução do toque: inicializar ou reinicializar.
+   3. O rodapé técnico: quantidade de habilidades, de módulos e o modo de
+      operação atual (por comando ou autônomo).
+3. **O que faz ao ser tocado** — reinicializa o núcleo por completo:
+   1. Interrompe a fala em andamento e encerra a escuta.
+   2. Fecha a janela de comando aberta.
+   3. Exibe `REINICIALIZANDO…` durante o processo.
+   4. Recarrega bateria, wake-lock, brilho salvo e motor autônomo.
+   5. Restabelece a escuta e confirma por voz.
+4. **Como se comporta visualmente**
+   1. Núcleo **apagado e dessaturado** quando o sistema está em espera.
+   2. Núcleo **aceso, com halo e anel pulsante** quando está ativo.
+   3. Afunda ao toque, com vibração curta de retorno.
