@@ -205,3 +205,40 @@ segundo e fala sem ser chamado nestas situações:
    - Diga “mantenha a tela ligada”.
 6. **Clima ou versículo online não respondem**
    - Exigem internet; sem rede o sistema usa o acervo local.
+
+---
+
+## MENU 7 — ÍCONE DE INICIALIZAÇÃO
+
+### 7.1 Arquivos gerados
+| Arquivo | Uso |
+|---|---|
+| `icons/reactor.svg` | Reator **animado** da tela de inicialização (vetor) |
+| `icons/icon-512.png` | Ícone principal do aplicativo instalado |
+| `icons/icon-192.png` | Ícone da tela inicial do Android |
+| `icons/icon-maskable-512.png` | Versão *maskable*, para recorte circular do Android |
+| `icons/apple-touch-icon.png` | Ícone do iPad e do Safari |
+| `icons/favicon-32.png` | Ícone da aba do navegador |
+
+### 7.2 Como o desenho foi construído
+1. Reator de arco em **vetor puro**, sem imagem externa nem fonte especial.
+2. Quatro camadas concêntricas: 60 tiques de escala, anel de 8 segmentos,
+   anel de progresso com 3 arcos e o núcleo com 6 bobinas radiais.
+3. Núcleo com gradiente radial branco-ciano e halo luminoso.
+4. Rasterizado em navegador real, para que o brilho e os gradientes
+   fiquem idênticos ao que aparece na tela.
+
+### 7.3 Animação da tela de inicialização
+1. **Tiques externos** giram em 26 segundos por volta.
+2. **Anel segmentado** gira em 9 segundos.
+3. **Anel de progresso** gira em sentido contrário, em 6 segundos.
+4. **Núcleo** pulsa em ciclo de 2,4 segundos.
+5. O conjunto entra em cena com expansão de 0,6 a 1,0 em 1,4 segundo.
+6. As animações estão dentro do próprio SVG, então funcionam offline e
+   sem JavaScript.
+
+### 7.4 Versão *maskable*
+O Android recorta ícones em círculo, losango ou quadrado arredondado,
+conforme o fabricante. Por isso o arquivo *maskable* mantém todo o desenho
+dentro de 62% do quadro — a zona segura — evitando que os anéis externos
+sejam cortados na tela inicial.

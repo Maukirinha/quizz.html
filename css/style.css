@@ -18,9 +18,10 @@ body{
 .boot{position:fixed;inset:0;z-index:60;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
 .boot.hide{opacity:0;pointer-events:none;transition:opacity .7s}
-.boot-core{width:120px;height:120px;border-radius:50%;
-  border:2px solid var(--cy);box-shadow:0 0 40px var(--cy),inset 0 0 30px var(--cy2);
-  animation:spin 3s linear infinite}
+.boot-core{width:min(46vw,220px);height:auto;
+  filter:drop-shadow(0 0 34px rgba(57,215,255,.55));
+  animation:surge 1.4s ease-out both}
+@keyframes surge{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
 .boot-text{font-size:13px;letter-spacing:2px;color:var(--dim);text-align:center;line-height:2}
 .boot-text p{opacity:0;margin:0}
 .boot-text p.on{opacity:1;color:var(--cy)}

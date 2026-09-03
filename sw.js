@@ -1,11 +1,13 @@
 /* J.A.R.V.I.S. — service worker: opera offline (cache-first com atualização) */
-const CACHE = 'jarvis-v1';
+const CACHE = 'jarvis-v2';
 const ARQ = [
   './', './index.html', './manifest.webmanifest',
   './css/style.css',
   './js/utils.js', './js/store.js', './js/speech.js', './js/device.js',
   './js/skills.js', './js/autonomy.js', './js/hud.js', './js/app.js',
-  './icons/icon-192.png', './icons/icon-512.png'
+  './icons/icon-192.png', './icons/icon-512.png',
+  './icons/icon-maskable-512.png', './icons/apple-touch-icon.png',
+  './icons/favicon-32.png', './icons/reactor.svg'
 ];
 
 self.addEventListener('install', e => {
