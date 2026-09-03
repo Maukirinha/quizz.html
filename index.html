@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#050a12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>J.A.R.V.I.S. — Controle de Voz Autônomo</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="boot" class="boot">
+  <div class="boot-core"></div>
+  <div class="boot-text">
+    <p data-l>INICIALIZANDO NÚCLEO J.A.R.V.I.S.</p>
+    <p data-l>CARREGANDO MÓDULOS DE VOZ</p>
+    <p data-l>CALIBRANDO SENSORES DO TABLET</p>
+    <p data-l>SISTEMA PRONTO</p>
+  </div>
+  <button id="bootBtn" class="boot-btn">TOCAR PARA ATIVAR</button>
+</div>
+
+<header class="top">
+  <div class="brand">
+    <span class="dot" id="stateDot"></span>
+    <b>J.A.R.V.I.S.</b>
+    <small id="stateLabel">offline</small>
+  </div>
+  <div class="chips">
+    <span class="chip" id="chipBat">🔋 —</span>
+    <span class="chip" id="chipNet">📶 —</span>
+    <span class="chip" id="chipClock">--:--</span>
+  </div>
+</header>
+
+<main class="stage">
+
+  <section class="hud">
+    <canvas id="reactor" width="620" height="620"></canvas>
+    <div class="hud-center">
+      <div id="hudMode">MODO ESPERA</div>
+      <div id="hudHint">diga “Jarvis”</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="live">
+      <div class="live-label">ESCUTA</div>
+      <div id="liveText" class="live-text">—</div>
+    </div>
+    <div id="log" class="log"></div>
+  </section>
+
+</main>
+
+<nav class="dock">
+  <button class="dk" id="btnPower" title="Ligar/Desligar escuta">⏻<span>Escuta</span></button>
+  <button class="dk" id="btnAuto" title="Modo autônomo">🤖<span>Autônomo</span></button>
+  <button class="dk" id="btnPush" title="Segure para falar">🎙️<span>Falar</span></button>
+  <button class="dk" id="btnMute" title="Silenciar voz">🔊<span>Voz</span></button>
+  <button class="dk" id="btnMenu" title="Menu de comandos">☰<span>Menu</span></button>
+</nav>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-head">
+    <b>MENU GERAL DE COMANDOS</b>
+    <button id="sheetClose">✕</button>
+  </div>
+  <div class="sheet-tabs" id="sheetTabs"></div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<div id="flash" class="flash" hidden></div>
+<div id="dim" class="dim"></div>
+
+<script src="js/utils.js"></script>
+<script src="js/store.js"></script>
+<script src="js/speech.js"></script>
+<script src="js/device.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/autonomy.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
