@@ -261,3 +261,35 @@ sejam cortados na tela inicial.
    1. Núcleo **apagado e dessaturado** quando o sistema está em espera.
    2. Núcleo **aceso, com halo e anel pulsante** quando está ativo.
    3. Afunda ao toque, com vibração curta de retorno.
+
+---
+
+## MENU 8 — ENDEREÇOS ALTERNATIVOS DE PUBLICAÇÃO
+
+### 8.1 Versão de arquivo único
+1. `jarvis.html` — a aplicação inteira em **um único arquivo de 130 KB**:
+   CSS, os oito módulos JavaScript, o reator animado e o ícone estão
+   embutidos, sem nenhuma referência externa.
+2. Gerado por `node tools/build-single.js`, que também confere se sobrou
+   alguma referência a arquivo local.
+3. `dist/jarvis-artifact.html` — a mesma aplicação sem as tags de documento,
+   para hospedagem em serviços de página única. Gerado por
+   `node tools/build-artifact.js`.
+4. **Diferença para a versão completa:** o arquivo único não traz manifesto
+   nem service worker, então não instala como aplicativo e não funciona
+   offline. Para isso, use a publicação normal pelo GitHub Pages.
+
+### 8.2 Onde hospedar o arquivo único
+1. **Netlify Drop** — `app.netlify.com/drop`: arraste o `jarvis.html`,
+   recebe um endereço HTTPS na hora.
+2. **raw.githack.com** — serve o próprio repositório por HTTPS, sem conta:
+   `https://raw.githack.com/Maukirinha/quizz.html/claude/voice-control-jarvis-project-xn3azn/index.html`
+3. **statically.io** — mesma ideia:
+   `https://cdn.statically.io/gh/Maukirinha/quizz.html/claude/voice-control-jarvis-project-xn3azn/index.html`
+4. **Não serve:** jsDelivr entrega arquivos HTML como texto puro, então a
+   página não abre por lá.
+
+### 8.3 Exigência que vale para todos os endereços
+O microfone só é liberado em **HTTPS** ou em **localhost**. Qualquer opção
+acima atende; abrir o arquivo por `file://` ou por IP da rede local em HTTP
+carrega a interface, mas o Chrome nega o microfone.
