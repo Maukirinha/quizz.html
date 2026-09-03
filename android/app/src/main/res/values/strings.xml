@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">J.A.R.V.I.S.</string>
+    <string name="acessibilidade_desc">Permite que o J.A.R.V.I.S. execute comandos de voz no celular inteiro: voltar, início, rolar a tela, tocar em botões pelo nome, digitar texto, abrir notificações, tirar print e bloquear a tela.</string>
+    <string name="canal_nome">Escuta do J.A.R.V.I.S.</string>
+</resources>
