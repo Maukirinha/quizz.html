@@ -144,8 +144,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun pedirPermissoes() {
         val faltando = mutableListOf<String>()
-        val desejadas = mutableListOf(Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS)
+        val desejadas = mutableListOf(Manifest.permission.RECORD_AUDIO)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             desejadas += Manifest.permission.POST_NOTIFICATIONS
 

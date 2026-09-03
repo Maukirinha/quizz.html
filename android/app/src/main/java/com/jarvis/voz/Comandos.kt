@@ -155,7 +155,7 @@ class Comandos(
         /* ============ COMUNICAÇÃO ============ */
 
         add("com.ligar", "Ligar para um número", "Comunicação",
-            listOf("ligue para 11 99999 8888"),
+            listOf("ligue para 11 99999 8888", "depois diga: toque em ligar"),
             { it.contains(Regex("\\b(ligue|ligar|telefone) para\\b")) },
             { t, _ ->
                 val num = com.numeroDaFrase(t) ?: return@add "Diga o número dígito por dígito."
@@ -174,7 +174,8 @@ class Comandos(
             })
 
         add("com.sms", "Mandar SMS", "Comunicação",
-            listOf("mande sms para 11 99999 8888 dizendo cheguei"),
+            listOf("mande sms para 11 99999 8888 dizendo cheguei",
+                   "depois diga: toque em enviar"),
             { it.contains("sms") || it.contains("torpedo") },
             { t, bruto ->
                 val num = com.numeroDaFrase(t.substringBefore("dizendo"))

@@ -29,10 +29,22 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleRelease --stacktrace
 
       - name: Renomear o arquivo
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk jarvis.apk
+        run: cp android/app/build/outputs/apk/release/app-release.apk jarvis.apk
+
+      - name: Conferir a assinatura e as permissões do APK
+        run: |
+          SDK=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          echo "== assinatura =="
+          "$SDK/apksigner" verify --print-certs jarvis.apk | grep -i "signer #1 certificate DN\|SHA-256"
+          echo "== permissões declaradas =="
+          "$SDK/aapt2" dump permissions jarvis.apk | grep "uses-permission" | sed 's/.*name=//'
+          echo "== nenhuma permissão de risco deve aparecer acima: SEND_SMS, CALL_PHONE, QUERY_ALL_PACKAGES =="
+          if "$SDK/aapt2" dump permissions jarvis.apk | grep -qE "SEND_SMS|CALL_PHONE|QUERY_ALL_PACKAGES"; then
+            echo "FALHA: permissão sinalizada pelo Play Protect ainda presente"; exit 1
+          fi
 
       - name: Publicar o APK para download
         uses: actions/upload-artifact@v4
@@ -48,6 +60,12 @@ jobs:
           name: J.A.R.V.I.S. APK ${{ github.run_number }}
           body: |
             APK do assistente de voz J.A.R.V.I.S. para Android.
+
+            Versão assinada com chave própria e estável, sem as permissões de
+            SMS e de chamada que faziam o Google Play Protect bloquear a
+            instalação. Ligações e mensagens continuam funcionando: o discador
+            e o aplicativo de mensagens abrem preenchidos, e o comando
+            "toque em enviar" conclui a ação.
 
             Instalação:
             1. Baixe o arquivo jarvis.apk pelo celular.

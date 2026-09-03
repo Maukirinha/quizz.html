@@ -15,10 +15,24 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("jarvis") {
+            // Chave própria e estável: garante que as próximas versões
+            // instalem por cima desta, sem precisar desinstalar o app.
+            storeFile = file("../jarvis.keystore")
+            storePassword = "jarvisvoz"
+            keyAlias = "jarvis"
+            keyPassword = "jarvisvoz"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("jarvis")
+        }
+        debug {
+            signingConfig = signingConfigs.getByName("jarvis")
         }
     }
 
