@@ -316,6 +316,26 @@ digita, liga, manda mensagem e mexe nos recursos do aparelho.
 3. Ative **Permitir desta fonte**.
 4. Volte e toque em **Instalar**.
 
+### 9.2.1 “Controlada pelas configurações restritas”
+Se o J.A.R.V.I.S. aparecer **cinza** na lista de Acessibilidade, com esse
+aviso, o Android 13 ou superior está bloqueando o app por ele ter vindo de
+fora da Play Store. O desbloqueio:
+
+1. **Configurações** → **Apps** → **Gerenciar apps** → **J.A.R.V.I.S.**
+   (ou toque em *DESBLOQUEAR CONFIGURAÇÕES RESTRITAS* dentro do app, que
+   leva direto a essa tela).
+2. Toque nos **três pontos ⋮** do canto superior direito.
+3. Escolha **Permitir configurações restritas**.
+4. Confirme com PIN, digital ou rosto.
+5. Volte à Acessibilidade — o item deixou de ficar cinza.
+
+Se a opção não aparecer no menu de três pontos:
+1. Reinicie o celular e repita — em alguns aparelhos ela só surge depois.
+2. Toque em **Forçar parada** antes de abrir o menu de três pontos.
+3. Reinstale pelo app **Arquivos**, e não pelo navegador.
+4. Ou instale por cabo, o que ignora a trava por completo:
+   `adb install -r jarvis.apk`
+
 ### 9.3 Primeira abertura — três autorizações
 1. **Microfone** — o app pede assim que abre. Toque em *Permitir*.
 2. **Controle do celular** — toque no botão **ATIVAR CONTROLE DO CELULAR**.

@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resposta: TextView
     private lateinit var btnEscuta: Button
     private lateinit var btnAcesso: Button
+    private lateinit var aviso: TextView
     private lateinit var mem: Memoria
 
     private val PEDIDO = 7
@@ -87,6 +88,18 @@ class MainActivity : AppCompatActivity() {
         btnAcesso = botao("ATIVAR CONTROLE DO CELULAR") { Acessibilidade.abrirConfiguracoes(this) }
         raiz.addView(btnEscuta)
         raiz.addView(btnAcesso)
+
+        aviso = texto(
+            "Se o J.A.R.V.I.S. aparecer cinza na Acessibilidade, escrito " +
+            "\u201ccontrolada pelas configurações restritas\u201d, toque no botão abaixo. " +
+            "Na tela que abrir, use o menu de três pontos do canto superior direito " +
+            "e escolha \u201cPermitir configurações restritas\u201d.",
+            12f, "#FFB648", Gravity.START, 0f)
+        raiz.addView(espaco(dp(10)))
+        raiz.addView(aviso)
+        raiz.addView(botao("DESBLOQUEAR CONFIGURAÇÕES RESTRITAS") {
+            Acessibilidade.abrirDadosDoApp(this)
+        })
         raiz.addView(botao("FALAR AGORA") {
             iniciarServico(JarvisService.ACAO_FALAR)
         })
@@ -128,6 +141,9 @@ class MainActivity : AppCompatActivity() {
                          else "ATIVAR CONTROLE DO CELULAR"
         btnAcesso.setTextColor(Color.parseColor(
             if (Acessibilidade.ativa()) "#37F0A0" else "#FFB648"))
+        // o aviso só interessa enquanto o controle não estiver ligado
+        aviso.visibility = if (Acessibilidade.ativa()) android.view.View.GONE
+                           else android.view.View.VISIBLE
     }
 
     private fun alternarEscuta() {

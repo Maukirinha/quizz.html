@@ -36,6 +36,18 @@ class Acessibilidade : AccessibilityService() {
             ctx.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
+
+        /**
+         * Abre os dados do aplicativo. É nesta tela, no menu de três pontos,
+         * que fica "Permitir configurações restritas" — o desbloqueio que o
+         * Android 13 e acima exige de aplicativos instalados fora da loja
+         * antes de deixá-los ligar a acessibilidade.
+         */
+        fun abrirDadosDoApp(ctx: Context) {
+            ctx.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                android.net.Uri.parse("package:${'$'}{ctx.packageName}"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
     }
 
     override fun onServiceConnected() {
