@@ -293,3 +293,142 @@ sejam cortados na tela inicial.
 O microfone só é liberado em **HTTPS** ou em **localhost**. Qualquer opção
 acima atende; abrir o arquivo por `file://` ou por IP da rede local em HTTP
 carrega a interface, mas o Chrome nega o microfone.
+
+---
+---
+
+# PARTE II — APLICATIVO ANDROID NATIVO
+
+A versão web comanda apenas a própria página. **Este aplicativo comanda o
+celular inteiro**: navega pelo sistema, abre qualquer app, toca em botões,
+digita, liga, manda mensagem e mexe nos recursos do aparelho.
+
+## MENU 9 — COMO INSTALAR NO CELULAR
+
+### 9.1 Baixar o APK
+1. Abra no celular: `https://github.com/Maukirinha/quizz.html/releases`
+2. Toque na versão mais recente, chamada **J.A.R.V.I.S. APK**.
+3. Baixe o arquivo **`jarvis.apk`**.
+
+### 9.2 Instalar
+1. Toque no arquivo baixado.
+2. O Android vai avisar que a origem é desconhecida — toque em **Configurações**.
+3. Ative **Permitir desta fonte**.
+4. Volte e toque em **Instalar**.
+
+### 9.3 Primeira abertura — três autorizações
+1. **Microfone** — o app pede assim que abre. Toque em *Permitir*.
+2. **Controle do celular** — toque no botão **ATIVAR CONTROLE DO CELULAR**.
+   Isso abre a lista de Acessibilidade do Android; encontre **J.A.R.V.I.S.**
+   e ligue a chave. Sem isso, o app fala e responde, mas não comanda o
+   sistema.
+3. **Modificar configurações** — pedida só na primeira vez que você mandar
+   mudar o brilho.
+4. Toque em **ATIVAR ESCUTA** e diga **“Jarvis”**.
+
+### 9.4 O que cada autorização libera
+| Autorização | Sem ela | Com ela |
+|---|---|---|
+| Microfone | nada funciona | escuta contínua |
+| Acessibilidade | só responde por voz | comanda o celular inteiro |
+| Modificar configurações | brilho não muda | brilho real do aparelho |
+| Chamadas | número é só discado | liga sozinho |
+| Notificações | sem alertas | avisos e serviço estável |
+
+## MENU 10 — COMANDOS QUE CONTROLAM O CELULAR
+
+### 10.1 Navegação do sistema
+1. “volte” — botão voltar.
+2. “tela inicial” — vai para a home.
+3. “recentes” — abre os apps recentes.
+4. “abra as notificações” — puxa a barra de notificações.
+5. “ajustes rápidos” — abre o painel rápido.
+6. “role para baixo” / “role para cima” — rola a tela atual.
+7. “leia a tela” — lê em voz alta o que está escrito.
+8. “tire um print” — captura a tela.
+9. “bloqueie o celular” — trava o aparelho.
+
+### 10.2 Operar qualquer aplicativo pela voz
+1. **“toque em enviar”** — encontra o botão escrito *Enviar* na tela e toca nele.
+2. **“clique em salvar”**, **“aperte em continuar”** — mesma coisa, com outros verbos.
+3. **“digite bom dia pastor”** — escreve no campo de texto que estiver em foco.
+4. Funciona em **qualquer app**: WhatsApp, banco, navegador, Bíblia.
+
+### 10.3 Aplicativos
+1. “abra o whatsapp”, “abra a câmera”, “abra a bíblia” — abre pelo nome falado.
+2. O reconhecimento tolera erros de transcrição: procura por nome exato,
+   por início, por trecho e, por último, por semelhança de escrita.
+3. “quais aplicativos eu tenho” — lista o que está instalado.
+
+### 10.4 Comunicação
+1. “ligue para 11 99999 8888”.
+2. “whatsapp para 11 99999 8888 dizendo estou a caminho”.
+3. “mande sms para 11 99999 8888 dizendo cheguei”.
+4. “pesquise sobre história da igreja”.
+
+### 10.5 Recursos do aparelho
+1. “ligue a lanterna” / “apague a lanterna”.
+2. “volume em 70 por cento”, “aumente o volume”, “modo silencioso”.
+3. “brilho em 40 por cento” — **brilho real**, não simulado.
+4. “abra o wi-fi”, “abra o bluetooth”, “modo avião”.
+5. “ative o não perturbe”.
+6. “qual o nível da bateria”, “como está a internet”.
+7. “vibre o celular”.
+
+### 10.6 Relógio do próprio celular
+1. “alarme para as 6 e 30” — cria alarme **no app de relógio do aparelho**,
+   que toca mesmo com o J.A.R.V.I.S. fechado.
+2. “temporizador de 10 minutos” — cria no relógio, igualmente.
+
+### 10.7 Pregação e estudo
+1. “monte um esboço sobre perdão” — roteiro completo.
+2. “plano de estudo sobre oração” — sete dias.
+3. “versículo do dia”.
+4. **“compartilhe o esboço”** — manda o roteiro pelo WhatsApp ou qualquer app.
+
+## MENU 11 — COMO O APP SE MANTÉM ESCUTANDO
+
+1. **Serviço em primeiro plano** com notificação fixa — o Android não mata
+   o app enquanto ele estiver ativo.
+2. **Reinício em laço** — o reconhecedor do Android encerra a cada frase;
+   o app o reinicia sozinho, com espera progressiva de até 8 segundos
+   quando há falhas seguidas, para não esgotar a bateria.
+3. **Pausa durante a fala** — a escuta é suspensa enquanto o assistente
+   responde, para ele não ouvir a própria voz.
+4. **Volta após reiniciar o celular** — o app religa sozinho no boot.
+5. **Palavra de ativação tolerante** — aceita *jarvis, jarves, jarbas,
+   darvis, javis, jarvi*, porque o reconhecedor erra nomes próprios.
+
+## MENU 12 — ARQUITETURA DO CÓDIGO ANDROID
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `MainActivity.kt` | Tela principal, permissões e estado do núcleo |
+| `MenuActivity.kt` | Menu detalhado, gerado a partir das habilidades |
+| `JarvisService.kt` | Serviço em primeiro plano, palavra de ativação, ciclo |
+| `Acessibilidade.kt` | Controle do celular inteiro: toques, texto, navegação |
+| `Escuta.kt` | Reconhecimento contínuo com reinício e supressão de eco |
+| `Fala.kt` | Voz em português com fila e aviso de término |
+| `Comandos.kt` | Roteador das habilidades por módulo |
+| `Aparelho.kt` | Lanterna, volume, brilho, painéis, alarme, vibração |
+| `Apps.kt` | Busca e abertura de apps pelo nome falado |
+| `Comunicacao.kt` | Ligação, SMS, WhatsApp, compartilhamento, busca |
+| `Biblia.kt` | Esboço de pregação e plano de estudo |
+| `Texto.kt` | Normalização, números por extenso, durações e cálculo |
+| `Memoria.kt` | Notas, listas e configuração no aparelho |
+| `ReatorView.kt` | Reator desenhado em tempo real, reagindo ao estado |
+| `BootReceiver.kt` | Religa a escuta depois de reiniciar o celular |
+
+## MENU 13 — LIMITES HONESTOS DESTA ABORDAGEM
+
+1. **Não vai para a Play Store.** O Google barra assistentes que usam
+   acessibilidade dessa forma. A instalação é por APK, direto.
+2. **Wi-Fi e Bluetooth não ligam sozinhos.** Desde o Android 10 o sistema
+   proíbe; o app abre o painel para você tocar uma vez.
+3. **Print e bloqueio de tela** exigem Android 11 e 9, respectivamente.
+4. **O reconhecimento de voz é o do Google.** Funciona offline se você
+   baixar o pacote de português em Configurações do Android, mas a
+   qualidade cai um pouco sem internet.
+5. **A acessibilidade é poderosa.** Ela enxerga o conteúdo das telas para
+   poder tocar nos botões. Tudo acontece dentro do seu aparelho — o app
+   não envia esse conteúdo para lugar nenhum.
