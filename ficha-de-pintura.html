@@ -1,0 +1,547 @@
+<title>Ficha de Pintura</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Mono:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: uma coluna de bancada — blocos numerados como etapas de uma ordem de
+   serviço, barra de progresso fixa no topo, ficha final em bloco monoespaçado. */
+:root{
+  --papel:#f2f0ec;          /* papel de bancada, cinza levemente quente */
+  --carta:#ffffff;
+  --tinta:#1c1f26;
+  --tinta-fraca:#5d6472;
+  --linha:#d8d5cf;
+  --pigmento:#1f4fd8;       /* azul ultramarino: o acento */
+  --pigmento-fraco:#e6ecfd;
+  --ocre:#9a6a12;           /* avisos e atenção */
+  --ocre-fraco:#f7efdc;
+  --verde:#1d7a52;          /* confirmação */
+  --display:"Archivo",system-ui,sans-serif;
+  --texto:"Source Sans 3",system-ui,sans-serif;
+  --dado:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --papel:#14161b; --carta:#1c1f26; --tinta:#e8e6e1; --tinta-fraca:#98a0b0;
+    --linha:#2e333d; --pigmento:#7d9dff; --pigmento-fraco:#1d2740;
+    --ocre:#e0ad4e; --ocre-fraco:#2c2416; --verde:#4fd39a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --papel:#14161b; --carta:#1c1f26; --tinta:#e8e6e1; --tinta-fraca:#98a0b0;
+  --linha:#2e333d; --pigmento:#7d9dff; --pigmento-fraco:#1d2740;
+  --ocre:#e0ad4e; --ocre-fraco:#2c2416; --verde:#4fd39a;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--papel);color:var(--tinta);
+  font-family:var(--texto);font-size:16px;line-height:1.55;
+  padding-inline:16px;padding-block:0;
+}
+.envelope{max-width:720px;margin-inline:auto;padding-block:0 64px}
+
+/* ---------- progresso ---------- */
+.barra{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  background:var(--papel);padding-block:10px;border-bottom:1px solid var(--linha);
+  display:flex;align-items:center;gap:12px;
+}
+.trilho{flex:1;height:6px;background:var(--linha);border-radius:3px;overflow:hidden;min-width:0}
+.preenche{height:100%;width:0;background:var(--pigmento);transition:width .3s ease}
+.contagem{font-family:var(--dado);font-size:12px;color:var(--tinta-fraca);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ---------- cabeçalho ---------- */
+header{padding-block:28px 22px}
+h1{
+  font-family:var(--display);font-weight:800;font-size:clamp(28px,7vw,40px);
+  line-height:1.05;margin:0 0 10px;text-wrap:balance;letter-spacing:-.01em;
+}
+.subtitulo{margin:0;color:var(--tinta-fraca);max-width:60ch}
+.selo{
+  display:inline-block;font-family:var(--dado);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--pigmento);margin-bottom:10px;
+}
+
+/* ---------- blocos ---------- */
+fieldset{
+  border:1px solid var(--linha);border-radius:4px;background:var(--carta);
+  margin:0 0 18px;padding:18px 18px 20px;
+}
+legend{
+  font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.1em;
+  text-transform:uppercase;padding-inline:8px;margin-inline-start:-4px;color:var(--tinta);
+}
+legend b{font-family:var(--dado);color:var(--pigmento);font-weight:600;margin-inline-end:6px}
+.nota{font-size:13.5px;color:var(--tinta-fraca);margin:0 0 16px;max-width:62ch}
+
+.campo{margin-bottom:18px}
+.campo:last-child{margin-bottom:0}
+.rotulo{display:block;font-weight:600;font-size:14.5px;margin-bottom:3px}
+.dica{display:block;font-size:13px;color:var(--tinta-fraca);margin-bottom:8px;max-width:62ch}
+
+input[type="text"],input[type="number"],textarea,select{
+  width:100%;font-family:var(--texto);font-size:15px;color:var(--tinta);
+  background:var(--papel);border:1px solid var(--linha);border-radius:3px;
+  padding:9px 11px;
+}
+textarea{min-height:76px;resize:vertical}
+input:focus-visible,textarea:focus-visible,select:focus-visible,
+button:focus-visible,label:focus-within{outline:2px solid var(--pigmento);outline-offset:2px}
+
+/* ---------- opções ---------- */
+.opcoes{display:flex;flex-direction:column;gap:7px}
+.opcoes.lado{flex-direction:row;flex-wrap:wrap}
+.opcao{
+  display:flex;gap:10px;align-items:flex-start;min-width:0;
+  border:1px solid var(--linha);border-radius:3px;padding:9px 12px;cursor:pointer;
+  background:var(--papel);
+}
+.opcoes.lado .opcao{flex:1 1 150px}
+.opcao:hover{border-color:var(--pigmento)}
+.opcao input{margin:3px 0 0;accent-color:var(--pigmento);flex:none}
+.opcao span{min-width:0}
+.opcao em{display:block;font-style:normal;font-size:12.5px;color:var(--tinta-fraca);margin-top:1px}
+.opcao:has(input:checked){border-color:var(--pigmento);background:var(--pigmento-fraco)}
+
+/* ---------- destaque do teste da fita ---------- */
+.protocolo{
+  border-inline-start:3px solid var(--ocre);background:var(--ocre-fraco);
+  padding:14px 16px;border-radius:0 3px 3px 0;margin-bottom:16px;
+}
+.protocolo h3{font-family:var(--display);font-size:14px;margin:0 0 8px;letter-spacing:.02em}
+.protocolo ol{margin:0;padding-inline-start:20px;font-size:14px}
+.protocolo li{margin-bottom:3px}
+.protocolo p{margin:10px 0 0;font-size:13px;color:var(--tinta-fraca)}
+
+/* ---------- fotos ---------- */
+.miniaturas{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-top:10px}
+.miniaturas img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;border:1px solid var(--linha);max-width:100%}
+
+/* ---------- ações ---------- */
+.acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+button{
+  font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.04em;
+  border-radius:3px;padding:12px 20px;cursor:pointer;border:1px solid var(--pigmento);
+}
+.primario{background:var(--pigmento);color:#fff}
+.secundario{background:transparent;color:var(--pigmento)}
+.discreto{background:transparent;color:var(--tinta-fraca);border-color:var(--linha)}
+
+/* ---------- ficha final ---------- */
+.ficha{border:2px solid var(--pigmento);border-radius:4px;background:var(--carta);padding:18px;margin-top:8px}
+.ficha h2{font-family:var(--display);font-size:15px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 4px}
+.ficha .aviso{font-size:13px;color:var(--tinta-fraca);margin:0 0 14px}
+pre{
+  font-family:var(--dado);font-size:12.5px;line-height:1.6;white-space:pre-wrap;
+  word-break:break-word;background:var(--papel);border:1px solid var(--linha);
+  border-radius:3px;padding:14px;margin:0 0 14px;overflow-x:auto;
+}
+.recado{font-size:13.5px;color:var(--verde);font-weight:600;margin:10px 0 0;min-height:20px}
+.faltando{color:var(--ocre)}
+footer{margin-top:26px;font-size:13px;color:var(--tinta-fraca);border-top:1px solid var(--linha);padding-top:14px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="envelope">
+
+  <div class="barra">
+    <div class="trilho"><div class="preenche" id="preenche"></div></div>
+    <span class="contagem" id="contagem">0 de 14</span>
+  </div>
+
+  <header>
+    <span class="selo">Ordem de serviço · pintura sob medida</span>
+    <h1>Ficha de Pintura</h1>
+    <p class="subtitulo">Preencha uma vez só. No fim, a página monta o resumo técnico
+      da sua peça para eu devolver a tabela de tons, as receitas em gotas, a ordem de
+      pintura e a diluição — sem ficar perguntando de novo.</p>
+  </header>
+
+  <form id="ficha">
+
+    <fieldset>
+      <legend><b>01</b> Quem pinta</legend>
+      <p class="nota">Isso define o nível das técnicas que entram na receita e quantas
+        cores cada mistura pode ter.</p>
+
+      <div class="campo">
+        <span class="rotulo">Sua experiência hoje</span>
+        <div class="opcoes" data-obrigatorio="nivel">
+          <label class="opcao"><input type="radio" name="nivel" value="Amador — nunca pintei"><span>Nunca pintei nada<em>Cada termo explicado do zero</em></span></label>
+          <label class="opcao"><input type="radio" name="nivel" value="Pouca experiência — 1 a 5 peças"><span>Pouca experiência, de 1 a 5 peças<em>Fundamentos reforçados, misturas de 2 cores</em></span></label>
+          <label class="opcao"><input type="radio" name="nivel" value="Experiente — pinto há algum tempo"><span>Pinto há algum tempo<em>Lavagem, esfregado a seco e camadas de transparência liberados</em></span></label>
+        </div>
+      </div>
+
+      <div class="campo">
+        <span class="rotulo">Já usou aerógrafo?</span>
+        <span class="dica">Aerógrafo é a ferramenta ligada a um compressor que pulveriza
+          tinta por ar comprimido.</span>
+        <div class="opcoes lado" data-obrigatorio="aerografo">
+          <label class="opcao"><input type="radio" name="aerografo" value="Nunca usou aerógrafo"><span>Nunca usei</span></label>
+          <label class="opcao"><input type="radio" name="aerografo" value="Usa aerógrafo com desenvoltura"><span>Uso bem</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>02</b> A peça</legend>
+      <p class="nota">Nome e altura me permitem buscar os tons oficiais do personagem e
+        calcular a espessura certa da tinta.</p>
+
+      <div class="campo">
+        <label class="rotulo" for="personagem">Personagem ou nome da peça</label>
+        <span class="dica">Se for de algum universo conhecido, escreva o nome exato e a versão.
+          Exemplo: Homem de Ferro Mark 85.</span>
+        <input type="text" id="personagem" name="personagem" placeholder="Ex.: Batman — traje clássico cinza e azul">
+      </div>
+
+      <div class="campo">
+        <label class="rotulo" for="altura">Altura em centímetros</label>
+        <span class="dica">Abaixo de 10 cm a tinta precisa ficar mais diluída, ou some o
+          detalhe do rosto.</span>
+        <input type="number" id="altura" name="altura" min="1" max="200" placeholder="Ex.: 18">
+      </div>
+
+      <div class="campo">
+        <span class="rotulo">Material</span>
+        <span class="dica">Resina é pesada e fria ao toque. PVC é leve e cede um pouco
+          quando você aperta.</span>
+        <div class="opcoes lado" data-obrigatorio="material">
+          <label class="opcao"><input type="radio" name="material" value="Resina"><span>Resina</span></label>
+          <label class="opcao"><input type="radio" name="material" value="PVC"><span>PVC</span></label>
+          <label class="opcao"><input type="radio" name="material" value="Impressão 3D em filamento (PLA/ABS)"><span>Filamento 3D</span></label>
+          <label class="opcao"><input type="radio" name="material" value="Material não identificado"><span>Não sei</span></label>
+        </div>
+      </div>
+
+      <div class="campo">
+        <span class="rotulo">Estado atual</span>
+        <div class="opcoes" data-obrigatorio="estado">
+          <label class="opcao"><input type="radio" name="estado" value="Crua — nenhuma tinta aplicada"><span>Crua<em>Recém-impressa, sem nenhuma tinta ou acabamento</em></span></label>
+          <label class="opcao"><input type="radio" name="estado" value="Pintura de fábrica original"><span>Com a pintura de fábrica<em>Saiu assim da caixa</em></span></label>
+          <label class="opcao"><input type="radio" name="estado" value="Repintura sobre trabalho anterior"><span>Já repintada antes<em>Alguém pintou por cima em algum momento</em></span></label>
+          <label class="opcao"><input type="radio" name="estado" value="Pintura antiga descascando"><span>Pintura descascando<em>Tem lasca, bolha ou área solta</em></span></label>
+        </div>
+      </div>
+
+      <div class="campo">
+        <span class="rotulo">Brilho da superfície</span>
+        <span class="dica">Superfície brilhante é inimiga da aderência: a tinta nova escorrega
+          e descasca depois. Passe a unha — se reflete a luz como plástico de brinquedo,
+          é brilhante.</span>
+        <div class="opcoes lado" data-obrigatorio="brilho">
+          <label class="opcao"><input type="radio" name="brilho" value="Fosca"><span>Fosca</span></label>
+          <label class="opcao"><input type="radio" name="brilho" value="Acetinada"><span>Acetinada</span></label>
+          <label class="opcao"><input type="radio" name="brilho" value="Brilhante"><span>Brilhante</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>03</b> Teste da fita</legend>
+      <div class="protocolo">
+        <h3>Faça antes de responder — leva 30 segundos</h3>
+        <ol>
+          <li>Cole 3 cm de fita crepe numa área escondida: base ou parte de trás da perna.</li>
+          <li>Pressione com o dedo por 10 segundos.</li>
+          <li>Puxe de uma vez só, em ângulo fechado, quase rente à superfície.</li>
+          <li>Olhe a fita contra a luz.</li>
+        </ol>
+        <p><strong>Erro mais comum:</strong> fazer o teste numa área visível. Se a tinta vier
+          junto, você criou uma falha bem no meio da peça. Sempre na base ou atrás.</p>
+      </div>
+      <div class="campo">
+        <span class="rotulo">O que veio na fita</span>
+        <div class="opcoes" data-obrigatorio="fita">
+          <label class="opcao"><input type="radio" name="fita" value="Fita saiu limpa — tinta antiga firme"><span>Saiu limpa<em>A tinta antiga está firme: dá para trabalhar por cima</em></span></label>
+          <label class="opcao"><input type="radio" name="fita" value="Fita com pontinhos de tinta"><span>Veio com pontinhos de cor<em>Aderência parcial: precisa de tratamento</em></span></label>
+          <label class="opcao"><input type="radio" name="fita" value="Fita arrancou lascas — tinta solta"><span>Arrancou lascas<em>A tinta antiga tem que sair antes</em></span></label>
+          <label class="opcao"><input type="radio" name="fita" value="Peça crua — teste não se aplica"><span>Peça crua, não se aplica</span></label>
+          <label class="opcao"><input type="radio" name="fita" value="Ainda não fiz o teste"><span>Ainda não fiz</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>04</b> Ferramentas</legend>
+      <div class="campo">
+        <span class="rotulo">Como pretende pintar</span>
+        <div class="opcoes lado" data-obrigatorio="ferramenta">
+          <label class="opcao"><input type="checkbox" name="ferramenta" value="Pincel"><span>Pincel</span></label>
+          <label class="opcao"><input type="checkbox" name="ferramenta" value="Aerógrafo"><span>Aerógrafo</span></label>
+          <label class="opcao"><input type="checkbox" name="ferramenta" value="Spray de lata"><span>Spray de lata</span></label>
+        </div>
+      </div>
+      <div class="campo">
+        <label class="rotulo" for="pinceis">Pincéis que você tem</label>
+        <span class="dica">Se souber, escreva os números. Para peça de 18 cm o essencial é
+          um 2 para base, um 0 para detalhe e um velho e duro para o esfregado a seco.</span>
+        <input type="text" id="pinceis" name="pinceis" placeholder="Ex.: 4, 2, 0, 00 e um pincel velho de cerdas duras">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>05</b> Tintas na bancada</legend>
+      <p class="nota">Monto as receitas com o que você já tem. Só indico compra se faltar
+        algo sem substituto.</p>
+      <div class="campo">
+        <span class="rotulo">Linhas que você possui</span>
+        <div class="opcoes lado" data-obrigatorio="marcas">
+          <label class="opcao"><input type="checkbox" name="marcas" value="Vallejo Model Color"><span>Vallejo</span></label>
+          <label class="opcao"><input type="checkbox" name="marcas" value="Citadel"><span>Citadel</span></label>
+          <label class="opcao"><input type="checkbox" name="marcas" value="Tamiya Color"><span>Tamiya</span></label>
+          <label class="opcao"><input type="checkbox" name="marcas" value="Mr. Hobby"><span>Mr. Hobby</span></label>
+          <label class="opcao"><input type="checkbox" name="marcas" value="Acrílica de artesanato (Acrilex e similares)"><span>Acrílica comum</span></label>
+          <label class="opcao"><input type="checkbox" name="marcas" value="Outras marcas"><span>Outras</span></label>
+        </div>
+      </div>
+      <div class="campo">
+        <label class="rotulo" for="cores">Cores que você tem certeza que possui</label>
+        <span class="dica">Não precisa listar tudo. Me diga principalmente: preto, branco,
+          os primários e os metálicos.</span>
+        <textarea id="cores" name="cores" placeholder="Ex.: preto fosco, branco, vermelho fogo, azul ultramarino, amarelo médio, terra de sombra, prata e dourado"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>06</b> Insumos de preparação</legend>
+      <p class="nota">São eles que decidem se a pintura dura anos ou descasca em semanas.</p>
+      <div class="campo">
+        <span class="rotulo">O que você tem</span>
+        <div class="opcoes" data-obrigatorio="insumos">
+          <label class="opcao"><input type="checkbox" name="insumos" value="Primer em spray"><span>Primer em spray<em>Base que faz a tinta grudar na peça</em></span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Primer de pincel ou aerógrafo"><span>Primer de pincel ou aerógrafo</span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Álcool isopropílico"><span>Álcool isopropílico<em>Álcool de limpeza de eletrônicos, para desengordurar</em></span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Lixa d'água fina (600 ou mais)"><span>Lixa d'água fina, 600 ou mais<em>O número é a grana: quanto maior, mais fina</em></span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Verniz fosco"><span>Verniz fosco<em>Acabamento final que tira o brilho e protege</em></span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Verniz brilhante ou acetinado"><span>Verniz brilhante ou acetinado</span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Paleta úmida"><span>Paleta úmida<em>Mantém a tinta trabalhável por horas</em></span></label>
+          <label class="opcao"><input type="checkbox" name="insumos" value="Nenhum desses"><span>Nenhum desses</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>07</b> Resultado desejado</legend>
+      <div class="campo">
+        <span class="rotulo">Acabamento que você quer</span>
+        <div class="opcoes" data-obrigatorio="acabamento">
+          <label class="opcao"><input type="radio" name="acabamento" value="Fiel à arte oficial do personagem"><span>Fiel à arte oficial<em>Cores chapadas, como na referência do personagem</em></span></label>
+          <label class="opcao"><input type="radio" name="acabamento" value="Realista, com desgaste e sujeira"><span>Realista, com desgaste<em>Metal riscado, poeira, marcas de uso</em></span></label>
+          <label class="opcao"><input type="radio" name="acabamento" value="Estilizado, com sombra e luz marcadas"><span>Estilizado<em>Sombra e luz marcadas, como miniatura de jogo</em></span></label>
+        </div>
+      </div>
+      <div class="campo">
+        <label class="rotulo" for="preocupacao">O que mais te preocupa nesta peça</label>
+        <span class="dica">Seja específico. Exemplo: o rosto, o metálico do peito, a transição
+          entre o vermelho e o dourado.</span>
+        <textarea id="preocupacao" name="preocupacao" placeholder="Ex.: nunca acerto o tom de pele do rosto, e a peça é pequena"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><b>08</b> Fotos</legend>
+      <p class="nota">Escolha as fotos para conferir o enquadramento. Elas ficam só no seu
+        aparelho — depois envie os arquivos direto na conversa, junto com a ficha.</p>
+      <div class="campo">
+        <label class="rotulo" for="fotos">Frente, costas e um detalhe, sob luz natural, sem flash</label>
+        <input type="file" id="fotos" accept="image/*" multiple>
+        <div class="miniaturas" id="miniaturas"></div>
+      </div>
+    </fieldset>
+
+    <div class="acoes">
+      <button type="button" class="primario" id="gerar">Montar a ficha</button>
+      <button type="button" class="discreto" id="limpar">Limpar tudo</button>
+    </div>
+  </form>
+
+  <section class="ficha" id="saida" hidden>
+    <h2>Ficha pronta</h2>
+    <p class="aviso">Copie o bloco abaixo e cole na conversa. Se tiver fotos, anexe junto.</p>
+    <pre id="texto"></pre>
+    <div class="acoes">
+      <button type="button" class="primario" id="copiar">Copiar a ficha</button>
+      <button type="button" class="secundario" id="selecionar">Selecionar o texto</button>
+    </div>
+    <p class="recado" id="recado"></p>
+  </section>
+
+  <footer>
+    As respostas ficam salvas neste aparelho enquanto você preenche, e some tudo ao
+    tocar em Limpar tudo.
+  </footer>
+</div>
+
+<script>
+(function(){
+  const form = document.getElementById('ficha');
+  const CHAVE = 'ficha-pintura-v1';
+
+  /* ---------- perguntas contadas no progresso ---------- */
+  const CAMPOS = ['nivel','aerografo','personagem','altura','material','estado',
+                  'brilho','fita','ferramenta','marcas','cores','insumos',
+                  'acabamento','preocupacao'];
+
+  const ROTULOS = {
+    nivel:'Experiência', aerografo:'Aerógrafo', personagem:'Peça', altura:'Altura',
+    material:'Material', estado:'Estado atual', brilho:'Brilho da superfície',
+    fita:'Teste da fita', ferramenta:'Ferramentas', marcas:'Linhas de tinta',
+    cores:'Cores disponíveis', insumos:'Insumos de preparação',
+    acabamento:'Acabamento desejado', preocupacao:'Maior preocupação'
+  };
+
+  function valor(nome){
+    const marcados = form.querySelectorAll('[name="'+nome+'"]:checked');
+    if (marcados.length) return Array.from(marcados).map(e => e.value).join(', ');
+    const campo = form.querySelector('[name="'+nome+'"]');
+    if (campo && campo.type !== 'radio' && campo.type !== 'checkbox')
+      return (campo.value || '').trim();
+    return '';
+  }
+
+  /* ---------- progresso ---------- */
+  function atualizar(){
+    const feitos = CAMPOS.filter(c => valor(c) !== '').length;
+    document.getElementById('preenche').style.width =
+      Math.round(feitos / CAMPOS.length * 100) + '%';
+    document.getElementById('contagem').textContent = feitos + ' de ' + CAMPOS.length;
+    guardar();
+  }
+
+  /* ---------- memória local deste aparelho ---------- */
+  function guardar(){
+    try {
+      const dados = {};
+      CAMPOS.forEach(c => { dados[c] = valor(c); });
+      localStorage.setItem(CHAVE, JSON.stringify(dados));
+    } catch (e) { /* aparelho sem armazenamento: segue sem salvar */ }
+  }
+
+  function restaurar(){
+    let dados = null;
+    try { dados = JSON.parse(localStorage.getItem(CHAVE) || 'null'); }
+    catch (e) { return; }
+    if (!dados) return;
+    CAMPOS.forEach(c => {
+      const guardado = dados[c];
+      if (!guardado) return;
+      const partes = guardado.split(', ');
+      form.querySelectorAll('[name="'+c+'"]').forEach(el => {
+        if (el.type === 'radio' || el.type === 'checkbox') {
+          if (partes.indexOf(el.value) >= 0) el.checked = true;
+        } else el.value = guardado;
+      });
+    });
+  }
+
+  /* ---------- montagem da ficha ---------- */
+  function montar(){
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    const linhas = ['FICHA DE PINTURA — ' + hoje, ''];
+    const faltando = [];
+
+    CAMPOS.forEach(c => {
+      const v = valor(c);
+      if (v === '') { faltando.push(ROTULOS[c]); return; }
+      let texto = v;
+      if (c === 'altura') texto = v + ' cm';
+      linhas.push(ROTULOS[c] + ': ' + texto);
+    });
+
+    const qtdFotos = document.getElementById('fotos').files.length;
+    linhas.push('Fotos selecionadas: ' + (qtdFotos ? qtdFotos + ' (envio em anexo)' : 'nenhuma ainda'));
+
+    if (faltando.length) {
+      linhas.push('');
+      linhas.push('Ainda não respondido: ' + faltando.join(', '));
+    }
+
+    linhas.push('');
+    linhas.push('O que eu preciso de volta:');
+    linhas.push('1. Tabela dos tons principais com os códigos das tintas');
+    linhas.push('2. Receitas de mistura em gotas, no máximo 3 cores cada');
+    linhas.push('3. Ordem de pintura, da camada de fundo aos detalhes');
+    linhas.push('4. Proporção de diluição para cada etapa');
+
+    return { texto: linhas.join('\n'), faltando: faltando };
+  }
+
+  /* ---------- eventos ---------- */
+  form.addEventListener('input', atualizar);
+  form.addEventListener('change', atualizar);
+
+  document.getElementById('fotos').addEventListener('change', function(ev){
+    const caixa = document.getElementById('miniaturas');
+    caixa.textContent = '';
+    Array.prototype.forEach.call(ev.target.files, function(arquivo){
+      const img = document.createElement('img');
+      img.alt = arquivo.name;
+      img.src = URL.createObjectURL(arquivo);
+      img.onload = function(){ URL.revokeObjectURL(img.src); };
+      caixa.appendChild(img);
+    });
+    atualizar();
+  });
+
+  document.getElementById('gerar').addEventListener('click', function(){
+    const r = montar();
+    document.getElementById('texto').textContent = r.texto;
+    document.getElementById('saida').hidden = false;
+    const recado = document.getElementById('recado');
+    if (r.faltando.length) {
+      recado.className = 'recado faltando';
+      recado.textContent = 'Faltam ' + r.faltando.length +
+        ' respostas. A ficha funciona assim mesmo, mas quanto mais completa, mais exata fica a receita.';
+    } else {
+      recado.className = 'recado';
+      recado.textContent = 'Ficha completa. Pode copiar.';
+    }
+    document.getElementById('saida').scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+
+  document.getElementById('copiar').addEventListener('click', function(){
+    const texto = document.getElementById('texto').textContent;
+    const recado = document.getElementById('recado');
+    try {
+      navigator.clipboard.writeText(texto).then(function(){
+        recado.className = 'recado';
+        recado.textContent = 'Copiado. Agora cole na conversa.';
+      }).catch(function(){
+        selecionar();
+        recado.className = 'recado faltando';
+        recado.textContent = 'Não consegui copiar sozinho. O texto está selecionado — use copiar do aparelho.';
+      });
+    } catch (e) {
+      selecionar();
+      recado.className = 'recado faltando';
+      recado.textContent = 'Texto selecionado. Use copiar do aparelho.';
+    }
+  });
+
+  function selecionar(){
+    const bloco = document.getElementById('texto');
+    const faixa = document.createRange();
+    faixa.selectNodeContents(bloco);
+    const selecao = window.getSelection();
+    selecao.removeAllRanges();
+    selecao.addRange(faixa);
+  }
+  document.getElementById('selecionar').addEventListener('click', selecionar);
+
+  document.getElementById('limpar').addEventListener('click', function(){
+    form.reset();
+    document.getElementById('miniaturas').textContent = '';
+    document.getElementById('saida').hidden = true;
+    try { localStorage.removeItem(CHAVE); } catch (e) {}
+    atualizar();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  restaurar();
+  atualizar();
+})();
+</script>
